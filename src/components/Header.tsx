@@ -8,7 +8,6 @@ interface HeaderProps {
 }
 const Header = ({ supabaseClient }: HeaderProps) => {
    const { user } = Auth.useUser();
-
    const handleLogoutClick = () => {
       supabaseClient.auth.signOut();
    };
