@@ -2,10 +2,9 @@ import Link from 'next/link';
 
 const Header = () => {
    return (
-      <header>
-         <nav>
-            <Link href="/">Home</Link> | <Link href="/about">About</Link> |{' '}
-            <Link href="/users">Users List</Link> | <a href="/api/users">Users API</a>
+      <header className="sticky top-0 left-0 right-0  border-b border-gray-900">
+         <nav className="p-4">
+            <Link href="/">Home</Link> | <Link href="/about">About</Link>
          </nav>
       </header>
    );
