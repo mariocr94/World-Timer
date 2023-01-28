@@ -1,5 +1,7 @@
+import { Auth } from '@supabase/auth-ui-react';
 import Head from 'next/head';
 import { ReactNode } from 'react';
+import supabaseClient from 'utils/supabaseClient';
 import Header from './Header';
 
 type Props = {
@@ -7,19 +9,21 @@ type Props = {
    title?: string;
 };
 
-const Layout = ({ children, title = 'Titulazo' }: Props) => (
+const Layout = ({ children, title = 'World Timer' }: Props) => (
    <div>
       <Head>
          <title>{title}</title>
          <meta charSet="utf-8" />
          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <Header />
-      {children}
-      <footer>
-         <hr />
-         <span>I'm here to stay (Footer)</span>
-      </footer>
+      <Auth.UserContextProvider supabaseClient={supabaseClient}>
+         <Header supabaseClient={supabaseClient} />
+         {children}
+         <footer>
+            <hr />
+            <span>I'm here to stay (Footer)</span>
+         </footer>
+      </Auth.UserContextProvider>
    </div>
 );
 
