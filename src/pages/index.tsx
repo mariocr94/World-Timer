@@ -1,16 +1,19 @@
 import { hourMinuteSecondFormat } from '@common/constants/timeFormat';
-import { Auth } from '@supabase/auth-ui-react';
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+// import { Auth } from '@supabase/auth-ui-react';
+import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import moment from 'moment-timezone';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { BsApple, BsFacebook } from 'react-icons/bs';
 import { FcGoogle } from 'react-icons/fc';
 import { signInWithFacebook, signInWithGoogle } from 'utils/signIn';
-import supabaseClient from 'utils/supabaseClient';
+// import supabaseClient from 'utils/supabaseClient';
 
 export default function Home() {
-   const { user } = Auth.useUser();
    const [localTime, setLocalTime] = useState('');
+   const supabaseClient = useSupabaseClient();
+   const user = useUser();
 
    useEffect(() => {
       const interval = setInterval(() => {
@@ -21,36 +24,36 @@ export default function Home() {
    }, []);
 
    return (
-      <div className="container mx-auto flex min-h-screen flex-col items-center justify-around p-4">
-         <h1 className="code font-mono text-xl">
+      <div className="container flex flex-col items-center justify-around min-h-screen p-4 mx-auto">
+         <h1 className="font-mono text-xl code">
             <span className="text-lg font-bold tracking-wide text-purple-700">The World Timer</span>
          </h1>
          <Image src="/images/pixel-world.png" alt="world" width={200} height={200} />
          {!user ? (
             <div className="flex flex-col gap-5">
                <button
-                  className="w-80 rounded-lg bg-blue-fb py-3 px-5 font-bold text-white"
+                  className="px-5 py-3 font-bold text-white rounded-lg w-80 bg-blue-fb"
                   onClick={() => {
                      signInWithFacebook(supabaseClient);
                   }}
                >
-                  <div className=" flex items-center justify-center gap-3">
-                     <BsFacebook className="h-5 w-5" /> Continue with Facebook
+                  <div className="flex items-center justify-center gap-3 ">
+                     <BsFacebook className="w-5 h-5" /> Continue with Facebook
                   </div>
                </button>
                <button
-                  className="w-80 rounded-lg bg-white py-3 px-5 font-bold text-gray-google shadow-2xl"
+                  className="px-5 py-3 font-bold bg-white rounded-lg shadow-2xl w-80 text-gray-google"
                   onClick={() => {
                      signInWithGoogle(supabaseClient);
                   }}
                >
                   <div className="flex items-center justify-center gap-3">
-                     <FcGoogle className="h-5 w-5" /> Continue with Google
+                     <FcGoogle className="w-5 h-5" /> Continue with Google
                   </div>
                </button>
-               <button className="w-80 rounded-lg bg-black py-3 px-5 font-bold text-white">
+               <button className="px-5 py-3 font-bold text-white bg-black rounded-lg w-80">
                   <div className="flex items-center justify-center gap-3">
-                     <BsApple className="h-5 w-5" /> Continue with Apple
+                     <BsApple className="w-5 h-5" /> Continue with Apple
                   </div>
                </button>
             </div>
@@ -64,18 +67,17 @@ export default function Home() {
    );
 }
 
-export async function getServerSideProps() {
-   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/getUser`).then(
-      (response) => response.json()
-   );
-
-   const { user } = response;
-   console.log(user.data);
-
-   if (user.data.user) {
+export async function getServerSideProps(ctx) {
+   const supabase = createServerSupabaseClient(ctx);
+   const {
+      data: { session },
+   } = await supabase.auth.getSession();
+   if (session)
       return {
-         redirect: { destination: '/dashboard', permanent: false },
+         redirect: {
+            destination: '/dashboard',
+            permanent: false,
+         },
       };
-   }
-   return { props: { user } };
+   return { props: { session } };
 }

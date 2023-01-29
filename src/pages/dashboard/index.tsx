@@ -1,25 +1,25 @@
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+
 interface DashboardProps {
-   user: any;
+   session: any;
 }
-const Dashboard = ({ user }: DashboardProps) => {
-   console.log(user);
-   return <div>Dashboard of {user.user_metadata?.name}</div>;
+const Dashboard = ({ session }: DashboardProps) => {
+   return <div>Dashboard of {session.user.user_metadata.name}</div>;
 };
 
 export default Dashboard;
 
-export async function getServerSideProps() {
-   const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_PATH}/api/getUser`).then(
-      (response) => response.json()
-   );
-
-   const { user } = response;
-   console.log(user);
-
-   if (!user.data.user) {
+export async function getServerSideProps(ctx) {
+   const supabase = createServerSupabaseClient(ctx);
+   const {
+      data: { session },
+   } = await supabase.auth.getSession();
+   if (!session)
       return {
-         redirect: { destination: '/', permanent: false },
+         redirect: {
+            destination: '/',
+            permanent: false,
+         },
       };
-   }
-   return { props: { user } };
+   return { props: { session } };
 }

@@ -1,28 +1,30 @@
-import { Auth } from '@supabase/auth-ui-react';
+import { useUser } from '@supabase/auth-helpers-react';
 import { SupabaseClient } from '@supabase/supabase-js';
+import { useRouter } from 'next/router';
 
 interface HeaderProps {
    supabaseClient: SupabaseClient;
 }
 const Header = ({ supabaseClient }: HeaderProps) => {
-   const { user } = Auth.useUser();
+   const router = useRouter();
+   const user = useUser();
+
    const handleLogoutClick = () => {
       supabaseClient.auth.signOut();
+      router.push('/');
    };
-
-   console.log(user);
 
    const renderUserOptions = () => {
       if (user)
          return (
-            <div className="flex w-full items-center justify-between gap-2">
+            <div className="flex items-center justify-between w-full gap-2">
                <img
                   src={user?.user_metadata?.avatar_url}
                   alt="avatar"
-                  className="h-10 w-10 rounded-full"
+                  className="w-10 h-10 rounded-full"
                />
                <button
-                  className="rounded-lg bg-indigo-500 py-2 px-4 text-gray-200"
+                  className="px-4 py-2 text-gray-200 bg-indigo-500 rounded-lg"
                   onClick={handleLogoutClick}
                >
                   Logout
