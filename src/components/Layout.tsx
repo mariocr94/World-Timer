@@ -6,7 +6,7 @@ import Header from './Header';
 type Props = {
    children?: ReactNode;
    title?: string;
-   supabaseClient: SupabaseClient;
+   supabaseClient?: SupabaseClient;
 };
 
 const Layout = ({ children, title = 'World Timer', supabaseClient }: Props) => (
@@ -17,11 +17,7 @@ const Layout = ({ children, title = 'World Timer', supabaseClient }: Props) => (
          <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <Header supabaseClient={supabaseClient} />
-      {children}
-      <footer>
-         <hr />
-         <span>I'm here to stay (Footer)</span>
-      </footer>
+      <main>{children}</main>
    </div>
 );
 
