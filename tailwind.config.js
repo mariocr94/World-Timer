@@ -7,6 +7,9 @@ module.exports = {
             'blue-fb': '#1877F2',
             'gray-google': '#76797E',
          },
+         height: {
+            'to-fit': 'calc(100vh - 72px)',
+         },
       },
    },
    plugins: [],

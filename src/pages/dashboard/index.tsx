@@ -17,7 +17,7 @@ const Dashboard = ({ session }: DashboardProps) => {
       return () => clearInterval(interval);
    }, []);
    return (
-      <div className="container flex flex-col items-center justify-around min-h-screen p-4 mx-auto">
+      <div className="container flex flex-col items-center justify-around p-4 mx-auto h-to-fit">
          <h1 className="font-mono text-xl code">
             <span className="text-lg font-bold tracking-wide text-purple-700">The World Timer</span>
          </h1>

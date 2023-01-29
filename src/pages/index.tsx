@@ -11,12 +11,12 @@ export default function Home() {
    const supabaseClient = useSupabaseClient();
 
    return (
-      <div className="container flex flex-col items-center justify-around min-h-screen p-4 mx-auto">
+      <div className="container flex flex-col items-center justify-around p-4 mx-auto h-to-fit">
          <h1 className="font-mono text-xl code">
             <span className="text-lg font-bold tracking-wide text-purple-700">The World Timer</span>
          </h1>
          <Image src="/images/pixel-world.png" alt="world" width={200} height={200} />
-         <div className="flex flex-col gap-5">
+         <div className="flex flex-col gap-5 md:flex-row">
             <button
                className="px-5 py-3 font-bold text-white rounded-lg w-80 bg-blue-fb"
                onClick={() => {

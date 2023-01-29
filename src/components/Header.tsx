@@ -9,8 +9,8 @@ const Header = ({ supabaseClient }: HeaderProps) => {
    const router = useRouter();
    const user = useUser();
 
-   const handleLogoutClick = () => {
-      supabaseClient.auth.signOut();
+   const handleLogoutClick = async () => {
+      await supabaseClient.auth.signOut();
       router.push('/');
    };
 
